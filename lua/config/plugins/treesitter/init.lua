@@ -10,10 +10,10 @@ return {
 		"bash",
 		"yaml",
 		"lua",
+		"latex",
 		"vim",
 		"query",
 		"vimdoc",
-		"latex", -- requires tree-sitter-cli (installed automatically via Mason)
 		"html",
 		"css",
 		"dot",
@@ -24,7 +24,7 @@ return {
 	},
 	highlight = {
 		enable = true,
-		additional_vim_regex_highlighting = { "python", "r" },
+		additional_vim_regex_highlighting = { "latex", "markdown" },
 	},
 	indent = {
 		enable = true,

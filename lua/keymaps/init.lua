@@ -12,6 +12,33 @@ vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 
 local wk = require("which-key")
 local ts = require("telescope.builtin")
+local ls = require("luasnip")
+
+local function smart_tab()
+	local function replace_keycodes(str)
+		return vim.api.nvim_replace_termcodes(str, true, true, false)
+	end
+	local col = vim.fn.col(".") - 1
+	local line = vim.fn.getline(".")
+	-- If at beginning of line or only whitespace before cursor
+	if col == 0 or string.match(string.sub(line, 1, col), "^%s*$") then
+		return "<Tab>"
+	elseif ls.expand_or_jumpable() then
+		-- Do nothing when not at beginning
+		return replace_keycodes("<Plug>luasnip-expand-or-jump")
+	else
+		return replace_keycodes("<Plug>(Tabout)")
+	end
+end
+
+vim.keymap.set({ "i", "s" }, "<Plug>LuasnipTab", function()
+	ls.jump(1)
+end, { silent = true })
+vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
+	ls.jump(-1)
+end, { silent = true })
+
+vim.keymap.set("i", "<Tab>", smart_tab, { expr = true })
 
 local M = {}
 M.static_keymap = {
@@ -62,7 +89,7 @@ M.lsp_keymap = {
 	group = "LSP",
 	mode = "n",
 	{ "grn", vim.lsp.buf.rename, desc = "[R]e[n]ame" },
-	{ "gra", vim.lsp.buf.code_action, desc = "[G]oto Code [A]ction", { "n", "x" } },
+	{ "gra", vim.lsp.buf.code_action, desc = "[G]oto Code [A]ction" },
 	{ "grr", ts.lsp_references, desc = "[G]oto [R]eferences" },
 	{ "gri", ts.lsp_implementations, desc = "[G]oto [I]mplementation" },
 	{ "grd", ts.lsp_definitions, desc = "[G]oto [D]efinition" },

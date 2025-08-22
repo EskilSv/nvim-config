@@ -28,7 +28,7 @@ return {
 				opts = {},
 			},
 
-			-- Allows extra capabilities provided by blink.cmp ! MOVE !
+			-- Allows extra capabilities provided by blink.cmp
 			"saghen/blink.cmp",
 		},
 		config = function()
